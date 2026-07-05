@@ -463,7 +463,7 @@ async function speakChunk(text: string, voice: Voice = state.responseVoice): Pro
 
     // Play audio
     await new Promise<void>((resolve, reject) => {
-      const playProc = exec(`${AUDIO_PLAYER} -nodisp "${audioFile}"`, { shell: defaultShell(), timeout: 30000 }, (error) => {
+      const playProc = exec(`${AUDIO_PLAYER} -nodisp -autoexit "${audioFile}"`, { shell: defaultShell(), timeout: 30000 }, (error) => {
         state.playbackProcess = null;
         if (error && !isKillError(error)) reject(error);
         else resolve();
