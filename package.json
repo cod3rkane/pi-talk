@@ -15,10 +15,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/agustif/pi-talk.git"
+    "url": "git+https://github.com/cod3rkane/pi-talk.git"
   },
-  "bugs": "https://github.com/agustif/pi-talk/issues",
-  "homepage": "https://github.com/agustif/pi-talk#readme",
+  "bugs": "https://github.com/cod3rkane/pi-talk/issues",
+  "homepage": "https://github.com/cod3rkane/pi-talk#readme",
   "publishConfig": {
     "access": "public"
   },
