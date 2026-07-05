@@ -389,8 +389,10 @@ async function logError(message: string) {
   const os = await import("node:os");
   const fs = await import("node:fs");
 
-  const tmpDir = path.resolve(path.dirname(os.tmpdir()), "pi-talk");
+  const tmpDir = path.resolve(os.tmpdir(), "pi-talk");
   const logFile = path.resolve(tmpDir, "pi-talk.log");
+
+  fs.mkdirSync(tmpDir, { recursive: true });
 
   return new Promise<void>((resolve, reject) => {
     resolve(fs.appendFileSync(logFile, `[${new Date().toISOString()}] ${message}\n`));
@@ -402,8 +404,10 @@ async function logDebugEvent(message: string) {
   const os = await import("node:os");
   const fs = await import("node:fs");
 
-  const tmpDir = path.resolve(path.dirname(os.tmpdir()), "pi-talk");
+  const tmpDir = path.resolve(os.tmpdir(), "pi-talk");
   const logFile = path.resolve(tmpDir, "pi-talk-events.log");
+
+  fs.mkdirSync(tmpDir, { recursive: true });
 
   return new Promise<void>((resolve, reject) => {
     resolve(fs.appendFileSync(logFile, `${message}\n`));
