@@ -425,7 +425,7 @@ async function speakChunk(text: string, voice: Voice = state.responseVoice): Pro
   const path = await import("node:path");
   const { exec } = await import("node:child_process");
 
-  const tmpDir = path.resolve(path.dirname(os.tmpdir()), "pi-talk");
+  const tmpDir = path.resolve(os.tmpdir(), "pi-talk");
   const audioFile = `${tmpDir}/audio-${crypto.randomUUID()}.wav`;
 
   state.tempFiles.push(audioFile);
@@ -463,7 +463,7 @@ async function speakChunk(text: string, voice: Voice = state.responseVoice): Pro
 
     // Play audio
     await new Promise<void>((resolve, reject) => {
-      const playProc = exec(`${AUDIO_PLAYER} "${audioFile}"`, { shell: process.env.SHELL || "/bin/sh", timeout: 30000 }, (error) => {
+      const playProc = exec(`${AUDIO_PLAYER} "${audioFile}"`, { shell: defaultShell(), timeout: 30000 }, (error) => {
         state.playbackProcess = null;
         if (error && !isKillError(error)) reject(error);
         else resolve();
