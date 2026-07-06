@@ -332,53 +332,7 @@ function resetStreamingState(): void {
  * Ensure speakturbo daemon is running
  */
 async function ensureDaemon(): Promise<void> {
-  // Quick check if already running
-  if (daemonStarted) {
-    try {
-      const response = await fetch(`${DAEMON_URL}/health`, { method: "GET" });
-      if (response.ok) return;
-    } catch {
-      daemonStarted = false;
-    }
-  }
-
-  // Prevent concurrent daemon starts
-  if (daemonStarting) {
-    // Wait for the other start attempt
-    for (let i = 0; i < 40; i++) {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      if (daemonStarted) return;
-    }
-    throw new Error("Daemon startup timed out");
-  }
-
-  daemonStarting = true;
-
-  const { exec } = await import("node:child_process");
-
-  // Start daemon in background
-  exec("nohup python3 -m speakturbo.daemon_streaming > /tmp/speakturbo-daemon.log 2>&1 &", (error) => {
-    if (error) {
-      logError(`Failed to start daemon: ${error}`);
-    }
-  });
-
-  // Wait for daemon to be ready
-  for (let i = 0; i < 40; i++) {
-    try {
-      const response = await fetch(`${DAEMON_URL}/health`, { method: "GET" });
-      if (response.ok) {
-        daemonStarted = true;
-        daemonStarting = false;
-        return;
-      }
-    } catch {
-      await new Promise((resolve) => setTimeout(resolve, 250));
-    }
-  }
-
-  daemonStarting = false;
-  throw new Error("Failed to start speakturbo daemon");
+  return await new Promise((resolve) => setTimeout(resolve, 100));
 }
 
 /**
@@ -431,7 +385,7 @@ async function speakChunk(text: string, voice: Voice = state.responseVoice): Pro
   state.tempFiles.push(audioFile);
 
   const escaped = JSON.stringify(text.trim());
-  const command = `~/.local/bin/speakturbo ${escaped} -v ${voice} -o ${audioFile} -q`;
+  const command = `~/.local/bin/pocket-tts generate --text ${escaped} --voice ${voice} --output-path ${audioFile}`;
 
   // Helper to check if error is from us killing the process
   const isKillError = (e: unknown): boolean => state.stopRequested || (e && typeof e === "object" && ("killed" in e || "signal" in e));
