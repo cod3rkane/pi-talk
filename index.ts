@@ -41,11 +41,11 @@ interface TalkState {
 const state: TalkState = {
   enabled: false,
   responseVoice: "alba",
-  thinkingVoice: "cosette",
-  toolVoice: "javert",
-  readThinking: true, // Default to reading thinking
+  thinkingVoice: "alba",
+  toolVoice: "alba",
+  readThinking: false, // Default to reading thinking
   announceTools: true,
-  generateThinkingTldr: true,
+  generateThinkingTldr: false,
   buffer: "",
   bufferKind: null,
   hiddenThinkingBuffer: "",
@@ -65,11 +65,6 @@ const MIN_CHARS = 30; // Don't speak tiny chunks
 
 // Cross-platform audio player
 const AUDIO_PLAYER = process.platform === "win32" ? "ffplay" : "afplay";
-
-// Daemon URL
-const DAEMON_URL = "http://127.0.0.1:7125";
-let daemonStarted = false;
-let daemonStarting = false; // Prevent concurrent daemon starts
 
 /**
  * Find natural break point in text
